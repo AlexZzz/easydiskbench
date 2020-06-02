@@ -1,0 +1,47 @@
+[global]
+include ./global
+
+[r4k]
+bs=4k
+write_iops_log=r4k
+include ./r
+
+[r8k]
+bs=8k
+write_iops_log=r8k
+include ./r
+
+[r16k]
+bs=16k
+write_iops_log=r16k
+include ./r
+
+[r32k]
+bs=32k
+write_iops_log=r32k
+include ./r
+
+[r64k]
+bs=64k
+write_iops_log=r64k
+include ./r
+
+[r128k]
+bs=128k
+write_iops_log=r128k
+include ./r
+
+[r256k]
+bs=256k
+write_iops_log=r256k
+include ./r
+
+[r1m]
+bs=1m
+write_iops_log=r1m
+include ./r
+
+[r4M]
+bs=4m
+write_iops_log=r4m
+include ./r

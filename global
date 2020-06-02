@@ -1,0 +1,10 @@
+filename=./fiofile
+filesize=1G
+direct=1
+ioengine=libaio
+stonewall
+log_avg_msec=200
+log_hist_msec=200
+loops=2
+per_job_logs=1
+random_generator=lfsr
