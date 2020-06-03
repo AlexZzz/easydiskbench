@@ -22,6 +22,7 @@ case "$#" in
     HOST="${2}"
     DIR="${3}"
     REMOTE_USER="${1}"
+    ;;
   * )
     echo "Accept only three arguments: ${0} remote_user host path"
     exit 1
@@ -73,4 +74,6 @@ fi
 ssh "${CREDS}" "
 pushd ${DIR}
 rm -r ./tests ./results ./fiofile
+popd
+rmdir ${DIR}
 "
