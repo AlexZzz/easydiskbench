@@ -57,7 +57,7 @@ ssh "${CREDS}" "
 pushd ${DIR}
 mkdir ./results
 pushd ./results
-fio ../basic.fio
+fio ../basic.fio --filename=../fiofile
 popd
 "
 if [[ $? != 0 ]]; then
@@ -70,4 +70,7 @@ if [[ $? != 0 ]]; then
 fi
 
 # Cleanup
-ssh "${CREDS}" "rm -r ${DIR}"
+ssh "${CREDS}" "
+pushd ${DIR}
+rm -r ./tests ./results ./fiofile
+"
