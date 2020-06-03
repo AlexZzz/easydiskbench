@@ -1,4 +1,3 @@
-filename=./fiofile
 filesize=1G
 direct=1
 ioengine=libaio
