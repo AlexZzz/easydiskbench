@@ -39,15 +39,12 @@ fatal() {
   exit 1
 }
 
-if [[ -d ./results ]]; then
-  if [[ -d ./results/${HOST} ]]; then
-    echo "./results/${HOST} is already exists"
-    echo "Please, delete and re-run ${0}"
-    exit 1
-  fi
-else
-  mkdir ./results
+if [[ -d ./results/${HOST} ]]; then
+  echo "./results/${HOST} is already exists"
+  echo "Please, delete and re-run ${0}"
+  exit 1
 fi
+mkdir -p ./results/${HOST}
 
 scp -r ./tests "${SCP_ARGS}"
 if [[ $? != 0 ]]; then
@@ -65,7 +62,7 @@ if [[ $? != 0 ]]; then
   fatal
 fi
 
-scp -r "${SCP_ARGS}"/results ./results/${HOSTS}
+scp -r "${SCP_ARGS}"/results ./results/${HOST}
 if [[ $? != 0 ]]; then
   fatal
 fi
