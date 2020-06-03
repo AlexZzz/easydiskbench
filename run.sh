@@ -18,11 +18,18 @@ case "$#" in
     HOST="${1}"
     DIR="${2}"
     ;;
+  3 )
+    HOST="${2}"
+    DIR="${3}"
+    REMOTE_USER="${1}"
   * )
-    echo "Accept only two arguments: ${0} host path"
+    echo "Accept only three arguments: ${0} remote_user host path"
     exit 1
     ;;
 esac
+
+CREDS="${REMOTE_USER}@${HOST}"
+SCP_ARGS="${CREDS}:${DIR}"
 
 fatal() {
   echo Please
@@ -31,12 +38,22 @@ fatal() {
   exit 1
 }
 
-set -x
-scp -r ./tests "${HOST}":"${DIR}"
+if [[ -d ./results ]]; then
+  if [[ -d ./results/${HOST} ]]; then
+    echo "./results/${HOST} is already exists"
+    echo "Please, delete and re-run ${0}"
+    exit 1
+  fi
+else
+  mkdir ./results
+fi
+
+scp -r ./tests "${SCP_ARGS}"
 if [[ $? != 0 ]]; then
   fatal
 fi
-ssh "${HOST}" "
+
+ssh "${CREDS}" "
 pushd ${DIR}
 mkdir ./results
 pushd ./results
@@ -46,10 +63,11 @@ popd
 if [[ $? != 0 ]]; then
   fatal
 fi
-scp -r "${HOST}":"${DIR}"/results ./
+
+scp -r "${SCP_ARGS}"/results ./results/${HOSTS}
 if [[ $? != 0 ]]; then
   fatal
 fi
 
 # Cleanup
-ssh "${HOST}" "rm -r ${DIR}"
+ssh "${CREDS}" "rm -r ${DIR}"
