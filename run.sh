@@ -24,7 +24,32 @@ case "$#" in
     ;;
 esac
 
-set +x
-ssh "${HOST}" 'rm ./tests'
-scp -r ./tests "${HOST}":/"${DIR}"
-ssh "${HOST}" 'fio ./tests/basic.fio'
+fatal() {
+  echo Please
+  printf "\033[38;5;196mAn error occured!\n"
+  printf "Please, cleanup %s on %s manually.\n\033[39m" "${DIR}" "${HOST}"
+  exit 1
+}
+
+set -x
+scp -r ./tests "${HOST}":"${DIR}"
+if [[ $? != 0 ]]; then
+  fatal
+fi
+ssh "${HOST}" "
+pushd ${DIR}
+mkdir ./results
+pushd ./results
+fio ../basic.fio
+popd
+"
+if [[ $? != 0 ]]; then
+  fatal
+fi
+scp -r "${HOST}":"${DIR}"/results ./
+if [[ $? != 0 ]]; then
+  fatal
+fi
+
+# Cleanup
+ssh "${HOST}" "rm -r ${DIR}"
