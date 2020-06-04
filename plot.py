@@ -8,10 +8,19 @@ import numpy as np
 
 def get_time_value(filename):
     f = open(filename,"r+")
+    count = 0
     for line in f.readlines():
         if line:
             linelist = line.split(",")
-            yield int(linelist[0].strip()), int(linelist[1].strip())
+            count += 1
+            yield int(linelist[0].strip()), int(linelist[1].strip()), int(count)
+
+def count_lines(filename):
+    count = 0
+    f = open(filename, "r+")
+    for line in f.readlines():
+        count += 1
+    return count
 
 def get_output(args):
     if args.output:
@@ -21,14 +30,15 @@ def get_output(args):
 
 def work(args):
     figure, axes = plt.subplots(nrows=1,ncols=1,figsize=(9,4))
+    plots = list()
     values_plot = list()
     labels = list()
     for input_file in args.input:
         bound = args.interval
         sum_bound = args.sum
         values = list()
-        labels = list()
-        for k, v in get_time_value(input_file):
+        lines_count = count_lines(input_file)
+        for k, v, c in get_time_value(input_file):
             if (k > bound):
                 labels.append(bound)
                 values_plot.append(np.array(values).astype(np.float))
@@ -43,12 +53,16 @@ def work(args):
                     except IndexError: # The only reason is empty list
                         values.append(v)
                 else:
-                    sum_bound += sum_bound
+                    sum_bound += args.sum
                     if (sum_bound > bound):
                         sum_bound = bound
                     values.append(v)
             else:
                 values.append(v)
+
+            if (c == lines_count): # We done. This was the last iteration
+                labels.append(k)
+                values_plot.append(np.array(values).astype(np.float))
 
     axes.boxplot(
         values_plot,
@@ -68,7 +82,7 @@ def main():
     parser.add_argument('--output','-o',type=str,help="Output file")
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msecs)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
-    parser.add_argument('--sum',type=int,help="Summarize by this interval to plot boxplot",default=0)
+    parser.add_argument('--sum',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
     args = parser.parse_args()
     work(args)
