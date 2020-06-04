@@ -38,8 +38,9 @@ def work(args):
         values = list() # Raw values from file
         lines_count = count_lines(input_file)
         for timestamp, v, line_num in get_time_value(input_file):
+            v = v / args.value_divider
             if (timestamp > bound): # |---s-----bt <- t is after the bound. Cleanup and prepare for plot
-                if not args.msecs:
+                if not args.msec:
                     labels_plot.append(bound/1e3)
                 else:
                     labels_plot.append(bound)
@@ -66,7 +67,7 @@ def work(args):
                 values.append(v)
 
             if (line_num == lines_count): # We done. This was the last iteration
-                if not args.msecs:
+                if not args.msec:
                     labels_plot.append(timestamp/1e3)
                 else:
                     labels_plot.append(timestamp)
@@ -95,6 +96,8 @@ def work(args):
             bplot_color_choice += 1
 
     axes.set_title(args.title)
+    plt.ylabel(args.ylabel)
+    plt.xlabel(args.xlabel)
     plt.ylim(ymin=0)
     plt.grid(True)
     plt.show()
@@ -103,11 +106,14 @@ def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
     parser.add_argument('--input','-i',type=str,nargs='*',help="Input files")
     parser.add_argument('--output','-o',type=str,help="Output file")
-    parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msecs)",default=30000)
+    parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msec)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
     parser.add_argument('--sum-bucket',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
-    parser.add_argument('--msecs',action='store_true',help="Show time in milliseconds instead of seconds")
+    parser.add_argument('--msec',action='store_true',help="Show time in milliseconds instead of seconds")
+    parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
+    parser.add_argument('--xlabel',type=str,help="Set this X-label",default="time (s)")
+    parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion",default=1e6)
     args = parser.parse_args()
     work(args)
 
