@@ -22,25 +22,18 @@ def count_lines(filename):
         count += 1
     return count
 
-def get_output(args):
-    if args.output:
-        return open(args.output, "w+")
-    else:
-        return sys.stdout
-
 def work(args):
     figure, axes = plt.subplots(nrows=1,ncols=1,figsize=(9,4))
-    plots = list()
-    values_plot = list()
-    labels = list()
     for input_file in args.input:
         bound = args.interval
         sum_bound = args.sum
+        values_plot = list()
+        labels_plot = list()
         values = list()
         lines_count = count_lines(input_file)
         for k, v, c in get_time_value(input_file):
             if (k > bound):
-                labels.append(bound)
+                labels_plot.append(bound)
                 values_plot.append(np.array(values).astype(np.float))
                 values.clear()
                 bound = bound + args.interval
@@ -61,15 +54,15 @@ def work(args):
                 values.append(v)
 
             if (c == lines_count): # We done. This was the last iteration
-                labels.append(k)
+                labels_plot.append(k)
                 values_plot.append(np.array(values).astype(np.float))
 
-    axes.boxplot(
-        values_plot,
-        vert=True,
-        patch_artist=True,
-        labels=labels, # Plot name as filename
-        whis=[1,99])
+        axes.boxplot(
+            values_plot,
+            vert=True,
+            patch_artist=True,
+            labels=labels_plot, # Plot name as filename
+            whis=[1,99])
 
     axes.set_title(args.title)
     plt.ylim(ymin=0)
