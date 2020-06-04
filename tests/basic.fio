@@ -24,7 +24,7 @@ bs=1m
 rw=randwrite
 fsync=1
 
-[rw4M]
+[rw4m]
 bs=4m
 rw=randwrite
 
@@ -32,7 +32,7 @@ rw=randwrite
 bs=1m
 rw=randread
 
-[rr4M]
+[rr4m]
 bs=4m
 rw=randread
 
@@ -40,7 +40,7 @@ rw=randread
 bs=1m
 rw=read
 
-[r4M]
+[r4m]
 bs=4m
 rw=read
 
