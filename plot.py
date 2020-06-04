@@ -31,8 +31,8 @@ def work(args):
         labels_plot = list() # Labels for X to plot on
         values = list() # Raw values from file
         lines_count = count_lines(input_file)
-        for k, v, c in get_time_value(input_file):
-            if (k > bound): # |---s-----bk <- k is after the bound. Cleanup and prepare for plot
+        for timestamp, v, line_num in get_time_value(input_file):
+            if (timestamp > bound): # |---s-----bt <- t is after the bound. Cleanup and prepare for plot
                 labels_plot.append(bound)
                 values_plot.append(np.array(values).astype(np.float))
                 values.clear()
@@ -40,21 +40,21 @@ def work(args):
                 sum_bound = args.sum_bucket
                 values.append(v)
             elif (sum_bound):
-                if (k <= bound - args.interval + sum_bound): # |-k-s-----b <- we are between '|' and 's'
+                if (timestamp <= bound - args.interval + sum_bound): # |-t-s-----b <- we are between '|' and 's'
                     try:
                         values[-1] += v
                     except IndexError: # The only reason is empty list
                         values.append(v)
-                else: # summarize for this bucket
+                else: # If we're out of bucket, then create set new sum_bound
                     sum_bound += args.sum_bucket
                     if (sum_bound > bound):
                         sum_bound = bound
-                    values.append(v)
+                    values.append(v) # And append value to new bucket
             else: # We are not summing and not over the bound. Just add new value
                 values.append(v)
 
-            if (c == lines_count): # We done. This was the last iteration
-                labels_plot.append(k)
+            if (line_num == lines_count): # We done. This was the last iteration
+                labels_plot.append(timestamp)
                 values_plot.append(np.array(values).astype(np.float))
 
         axes.boxplot(
