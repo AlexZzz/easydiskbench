@@ -69,6 +69,7 @@ def work(args):
             axes.boxplot(
                 values_plot,
                 vert=True,
+                manage_ticks=False,
                 patch_artist=True,
                 labels=labels_plot, # Plot name as filename
                 whis=[1,99])
