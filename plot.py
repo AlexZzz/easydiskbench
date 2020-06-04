@@ -26,7 +26,7 @@ def work(args):
     figure, axes = plt.subplots(nrows=1,ncols=1,figsize=(9,4))
     for input_file in args.input:
         bound = args.interval
-        sum_bound = args.sum
+        sum_bound = args.sum_bucket
         values_plot = list() # Values of Y to plot
         labels_plot = list() # Labels for X to plot on
         values = list() # Raw values from file
@@ -37,7 +37,7 @@ def work(args):
                 values_plot.append(np.array(values).astype(np.float))
                 values.clear()
                 bound = bound + args.interval
-                sum_bound = args.sum
+                sum_bound = args.sum_bucket
                 values.append(v)
             elif (sum_bound):
                 if (k <= bound - args.interval + sum_bound): # |-k-s-----b <- we are between '|' and 's'
@@ -46,7 +46,7 @@ def work(args):
                     except IndexError: # The only reason is empty list
                         values.append(v)
                 else: # summarize for this bucket
-                    sum_bound += args.sum
+                    sum_bound += args.sum_bucket
                     if (sum_bound > bound):
                         sum_bound = bound
                     values.append(v)
@@ -75,7 +75,7 @@ def main():
     parser.add_argument('--output','-o',type=str,help="Output file")
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msecs)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
-    parser.add_argument('--sum',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
+    parser.add_argument('--sum-bucket',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
     args = parser.parse_args()
     work(args)
