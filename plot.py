@@ -39,7 +39,10 @@ def work(args):
         lines_count = count_lines(input_file)
         for timestamp, v, line_num in get_time_value(input_file):
             if (timestamp > bound): # |---s-----bt <- t is after the bound. Cleanup and prepare for plot
-                labels_plot.append(bound)
+                if not args.msecs:
+                    labels_plot.append(bound/1e3)
+                else:
+                    labels_plot.append(bound)
                 if args.median: # Count median here if needed
                     values_plot.append(np.percentile(values,50))
                 else:
@@ -63,7 +66,10 @@ def work(args):
                 values.append(v)
 
             if (line_num == lines_count): # We done. This was the last iteration
-                labels_plot.append(timestamp)
+                if not args.msecs:
+                    labels_plot.append(timestamp/1e3)
+                else:
+                    labels_plot.append(timestamp)
                 if args.median:
                     values_plot.append(np.percentile(values, 50))
                 else:
@@ -101,6 +107,7 @@ def main():
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
     parser.add_argument('--sum-bucket',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
+    parser.add_argument('--msecs',action='store_true',help="Show time in milliseconds instead of seconds")
     args = parser.parse_args()
     work(args)
 
