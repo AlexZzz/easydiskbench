@@ -34,7 +34,10 @@ def work(args):
         for timestamp, v, line_num in get_time_value(input_file):
             if (timestamp > bound): # |---s-----bt <- t is after the bound. Cleanup and prepare for plot
                 labels_plot.append(bound)
-                values_plot.append(np.array(values).astype(np.float))
+                if args.median: # Count median here if needed
+                    values_plot.append(np.percentile(values,50))
+                else:
+                    values_plot.append(np.array(values).astype(np.float))
                 values.clear()
                 bound = bound + args.interval
                 sum_bound = args.sum_bucket
@@ -55,14 +58,20 @@ def work(args):
 
             if (line_num == lines_count): # We done. This was the last iteration
                 labels_plot.append(timestamp)
-                values_plot.append(np.array(values).astype(np.float))
+                if args.median:
+                    values_plot.append(np.percentile(values, 50))
+                else:
+                    values_plot.append(np.array(values).astype(np.float))
 
-        axes.boxplot(
-            values_plot,
-            vert=True,
-            patch_artist=True,
-            labels=labels_plot, # Plot name as filename
-            whis=[1,99])
+        if args.median:
+            axes.plot(labels_plot,np.array(values_plot),'o-')
+        else:
+            axes.boxplot(
+                values_plot,
+                vert=True,
+                patch_artist=True,
+                labels=labels_plot, # Plot name as filename
+                whis=[1,99])
 
     axes.set_title(args.title)
     plt.ylim(ymin=0)
