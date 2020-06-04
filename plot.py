@@ -27,12 +27,12 @@ def work(args):
     for input_file in args.input:
         bound = args.interval
         sum_bound = args.sum
-        values_plot = list()
-        labels_plot = list()
-        values = list()
+        values_plot = list() # Values of Y to plot
+        labels_plot = list() # Labels for X to plot on
+        values = list() # Raw values from file
         lines_count = count_lines(input_file)
         for k, v, c in get_time_value(input_file):
-            if (k > bound):
+            if (k > bound): # |---s-----bk <- k is after the bound. Cleanup and prepare for plot
                 labels_plot.append(bound)
                 values_plot.append(np.array(values).astype(np.float))
                 values.clear()
@@ -40,17 +40,17 @@ def work(args):
                 sum_bound = args.sum
                 values.append(v)
             elif (sum_bound):
-                if (k <= bound - args.interval + sum_bound): # |--s-----i <- we are between '|' and 's'
+                if (k <= bound - args.interval + sum_bound): # |-k-s-----b <- we are between '|' and 's'
                     try:
                         values[-1] += v
                     except IndexError: # The only reason is empty list
                         values.append(v)
-                else:
+                else: # summarize for this bucket
                     sum_bound += args.sum
                     if (sum_bound > bound):
                         sum_bound = bound
                     values.append(v)
-            else:
+            else: # We are not summing and not over the bound. Just add new value
                 values.append(v)
 
             if (c == lines_count): # We done. This was the last iteration
