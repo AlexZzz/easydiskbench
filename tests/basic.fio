@@ -8,53 +8,29 @@ fsync=1
 
 [w32k_fsync]
 bs=32k
-write_iops_log
-write_lat_log
-write_bw_log
 rw=randwrite
 fsync=1
 
 [r4k]
 bs=4k
-write_iops_log
-write_lat_log
-write_bw_log
 
 [r32k]
 bs=32k
-write_iops_log
-write_lat_log
-write_bw_log
 
 [w1m]
 bs=1m
-write_iops_log
-write_lat_log
-write_bw_log
 rw=randwrite
 fsync=1
 
 [w4M]
 bs=4m
-write_iops_log
-write_lat_log
-write_bw_log
 
 [r1m]
 bs=1m
-write_iops_log
-write_lat_log
-write_bw_log
 
 [r4M]
 bs=4m
-write_iops_log
-write_lat_log
-write_bw_log
 
 [r1m_cache_check]
 bs=4k
-write_iops_log
-write_lat_log
-write_bw_log
 random_distribution=pareto:0.25
