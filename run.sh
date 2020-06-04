@@ -62,7 +62,7 @@ if [[ $? != 0 ]]; then
   fatal
 fi
 
-scp -r "${SCP_ARGS}"/results ./results/${HOST}
+scp -r "${SCP_ARGS}"/results/* ./results/${HOST}/
 if [[ $? != 0 ]]; then
   fatal
 fi
