@@ -6,6 +6,9 @@ import csv
 import matplotlib.pyplot as plt
 import numpy as np
 
+# This is just a list for boxplot colors. Why not?
+bplot_colors = ['red', 'blue', 'green', 'lightblue', 'lightgreen', 'pink', 'burlywood', 'chartreuse']
+
 def get_time_value(filename):
     f = open(filename,"r+")
     count = 0
@@ -24,6 +27,9 @@ def count_lines(filename):
 
 def work(args):
     figure, axes = plt.subplots(nrows=1,ncols=1,figsize=(9,4))
+    if not args.median: # Do we need better solution?
+        bplot_color_choice = 0
+
     for input_file in args.input:
         bound = args.interval
         sum_bound = args.sum_bucket
@@ -76,7 +82,11 @@ def work(args):
                 manage_ticks=manage_ticks,
                 patch_artist=True,
                 labels=labels_plot, # Plot name as filename
-                whis=[1,99])
+                whis=[1,99],
+                boxprops=dict(
+                    facecolor=bplot_colors[bplot_color_choice])
+                )
+            bplot_color_choice += 1
 
     axes.set_title(args.title)
     plt.ylim(ymin=0)
