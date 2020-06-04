@@ -77,7 +77,7 @@ def work(args):
                     values_plot.append(np.array(values).astype(np.float))
 
         if args.median:
-            axes.plot(labels_plot,np.array(values_plot),'o-')
+            axes.plot(labels_plot,np.array(values_plot),'o-',label=input_file)
         else:
             locs, ticks = plt.xticks()
             manage_ticks = False
@@ -96,6 +96,7 @@ def work(args):
             bplot_color_choice += 1
 
     axes.set_title(args.title)
+    plt.legend()
     plt.ylabel(args.ylabel)
     plt.xlabel(args.xlabel)
     plt.ylim(ymin=0)
