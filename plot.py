@@ -66,10 +66,14 @@ def work(args):
         if args.median:
             axes.plot(labels_plot,np.array(values_plot),'o-')
         else:
+            locs, ticks = plt.xticks()
+            manage_ticks = False
+            if len(locs) < len(labels_plot):
+                manage_ticks = True
             axes.boxplot(
                 values_plot,
                 vert=True,
-                manage_ticks=False,
+                manage_ticks=manage_ticks,
                 patch_artist=True,
                 labels=labels_plot, # Plot name as filename
                 whis=[1,99])
