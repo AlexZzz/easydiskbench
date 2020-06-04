@@ -1,36 +1,55 @@
 [global]
 include ./global
 
-[w4k_fsync]
+[rw4k_fsync]
 bs=4k
 rw=randwrite
 fsync=1
 
-[w32k_fsync]
+[rw32k_fsync]
 bs=32k
 rw=randwrite
 fsync=1
 
-[r4k]
+[rr4k]
 bs=4k
+rw=randread
 
-[r32k]
+[rr32k]
 bs=32k
+rw=randread
 
-[w1m]
+[rw1m]
 bs=1m
 rw=randwrite
 fsync=1
 
-[w4M]
+[rw4M]
 bs=4m
+rw=randwrite
+
+[rr1m]
+bs=1m
+rw=randread
+
+[rr4M]
+bs=4m
+rw=randread
 
 [r1m]
 bs=1m
+rw=read
 
 [r4M]
 bs=4m
+rw=read
+
+[r4k_cache_check]
+bs=4k
+rw=randread
+random_distribution=pareto:0.25
 
 [r1m_cache_check]
-bs=4k
+bs=1m
+rw=randread
 random_distribution=pareto:0.25
