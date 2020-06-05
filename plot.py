@@ -99,7 +99,10 @@ def work(args):
     plt.legend()
     plt.ylabel(args.ylabel)
     plt.xlabel(args.xlabel)
-    plt.ylim(ymin=0)
+    if (args.top_limit):
+        plt.ylim(bottom=0,top=args.top_limit)
+    else:
+        plt.ylim(bottom=0)
     plt.grid(True)
     plt.show()
 
@@ -115,6 +118,7 @@ def main():
     parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
     parser.add_argument('--xlabel',type=str,help="Set this X-label",default="time (s)")
     parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion",default=1e6)
+    parser.add_argument('--top-limit',type=float,help="Set Y axis top limit")
     args = parser.parse_args()
     work(args)
 
