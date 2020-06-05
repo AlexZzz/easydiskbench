@@ -40,7 +40,7 @@ fatal() {
 }
 
 install_fio() {
-  ssh "${CREDS}" 'apt udpate && apt install fio -y'
+  ssh "${CREDS}" 'apt update && apt install fio -y'
 }
 
 if [[ -d ./results/${HOST} ]]; then
