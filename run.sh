@@ -40,6 +40,7 @@ fatal() {
 }
 
 install_fio() {
+  echo "No fio command found, trying to install"
   ssh "${CREDS}" 'apt update && apt install fio -y'
 }
 
@@ -50,7 +51,7 @@ if [[ -d ./results/${HOST} ]]; then
 fi
 mkdir -p ./results/${HOST}
 
-install_fio
+command -v fio > /dev/null 2>&1 || install_fio
 
 scp -r ./tests "${SCP_ARGS}"
 if [[ $? != 0 ]]; then
