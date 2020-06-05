@@ -39,12 +39,18 @@ fatal() {
   exit 1
 }
 
+install_fio() {
+  ssh "${CREDS}" 'apt install fio -y'
+}
+
 if [[ -d ./results/${HOST} ]]; then
   echo "./results/${HOST} is already exists"
   echo "Please, delete and re-run ${0}"
   exit 1
 fi
 mkdir -p ./results/${HOST}
+
+install_fio
 
 scp -r ./tests "${SCP_ARGS}"
 if [[ $? != 0 ]]; then
