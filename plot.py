@@ -30,6 +30,9 @@ def work(args):
     if not args.median: # Do we need better solution?
         bplot_color_choice = 0
 
+    bplot_boxes = list()
+    bplot_legends = list()
+
     for input_file in args.input:
         bound = args.interval
         sum_bound = args.sum_bucket
@@ -83,7 +86,7 @@ def work(args):
             manage_ticks = False
             if len(locs) < len(labels_plot):
                 manage_ticks = True
-            axes.boxplot(
+            bp = axes.boxplot(
                 values_plot,
                 vert=True,
                 manage_ticks=manage_ticks,
@@ -93,10 +96,15 @@ def work(args):
                 boxprops=dict(
                     facecolor=bplot_colors[bplot_color_choice])
                 )
+            bplot_boxes.append(bp["boxes"][0])
+            bplot_legends.append(input_file)
             bplot_color_choice += 1
 
     axes.set_title(args.title)
-    plt.legend()
+    if not args.median:
+        axes.legend(bplot_boxes,bplot_legends)
+    else:
+        plt.legend()
     plt.ylabel(args.ylabel)
     plt.xlabel(args.xlabel)
     if (args.top_limit):
