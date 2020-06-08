@@ -62,7 +62,7 @@ ssh "${CREDS}" "
 pushd ${DIR}
 mkdir ./results
 pushd ./results
-fio ../basic.fio --filename=../fiofile
+fio ../basic.fio --filename=../fiofile --output=./base_results
 popd
 "
 if [[ $? != 0 ]]; then
