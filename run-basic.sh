@@ -77,7 +77,7 @@ fi
 # Cleanup
 ssh "${CREDS}" "
 pushd ${DIR}
-rm -r ./tests ./results ./fiofile
+rm -r ./*.fio ./global ./results ./fiofile
 popd
 rmdir ${DIR}
 "
