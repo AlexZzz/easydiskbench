@@ -112,12 +112,16 @@ def work(args):
     else:
         plt.ylim(bottom=0)
     plt.grid(True)
-    plt.show()
+
+    if args.output:
+        plt.savefig(args.output)
+    else:
+        plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
     parser.add_argument('--input','-i',type=str,nargs='*',help="Input files")
-    parser.add_argument('--output','-o',type=str,help="Output file")
+    parser.add_argument('--output','-o',type=str,help="Write char to this output file")
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msec)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
     parser.add_argument('--sum-bucket',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
