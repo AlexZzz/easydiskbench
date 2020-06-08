@@ -1,15 +1,15 @@
 [global]
 include ./global
 
-[rw4k_fsync]
+[rw4k_sync]
 bs=4k
 rw=randwrite
-fsync=1
+sync=1
 
-[rw32k_fsync]
+[rw32k_sync]
 bs=32k
 rw=randwrite
-fsync=1
+sync=1
 
 [rr4k]
 bs=4k
@@ -22,7 +22,7 @@ rw=randread
 [rw1m]
 bs=1m
 rw=randwrite
-fsync=1
+sync=1
 
 [rw4m]
 bs=4m
