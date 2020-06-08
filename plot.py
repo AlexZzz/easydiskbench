@@ -125,7 +125,7 @@ def main():
     parser.add_argument('--msec',action='store_true',help="Show time in milliseconds instead of seconds")
     parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
     parser.add_argument('--xlabel',type=str,help="Set this X-label",default="time (s)")
-    parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion",default=1e6)
+    parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion. Set to 1 for IOPS plot",default=1e6)
     parser.add_argument('--top-limit',type=float,help="Set Y axis top limit")
     args = parser.parse_args()
     work(args)
