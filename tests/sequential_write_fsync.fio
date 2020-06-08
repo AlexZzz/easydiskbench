@@ -1,39 +1,30 @@
 [global]
 include ./global
-include ./w
+rw=write
 
 [w4k_fsync]
 bs=4k
-write_iops_log=w4k_fsync
 
 [w8k_fsync]
 bs=8k
-write_iops_log=w8k_fsync
 
 [w16k_fsync]
 bs=16k
-write_iops_log=w16k_fsync
 
 [w32k_fsync]
 bs=32k
-write_iops_log=w32k_fsync
 
 [w64k_fsync]
 bs=64k
-write_iops_log=w64k_fsync
 
 [w128k_fsync]
 bs=128k
-write_iops_log=w128k_fsync
 
 [w256k_fsync]
 bs=256k
-write_iops_log=w256k_fsync
 
 [w1m_fsync]
 bs=1m
-write_iops_log=w1m_fsync
 
 [w4m_fsync]
 bs=4m
-write_iops_log=w4m_fsync
