@@ -8,6 +8,8 @@ import numpy as np
 
 # This is just a list for boxplot colors. Why not?
 bplot_colors = ['red', 'blue', 'green', 'lightblue', 'lightgreen', 'pink', 'burlywood', 'chartreuse']
+flier_colors = ['pink', 'lightblue', 'lightgreen', 'blue', 'green', 'red', 'burlywood', 'chartreuse']
+median_colors = ['blue', 'red', 'lightgreen', 'pink', 'burlywood', 'chartreuse', 'green', 'lightblue']
 
 def get_time_value(filename):
     f = open(filename,"r+")
@@ -94,7 +96,15 @@ def work(args):
                 labels=labels_plot, # Plot name as filename
                 whis=[1,99],
                 boxprops=dict(
-                    facecolor=bplot_colors[bplot_color_choice])
+                    facecolor=bplot_colors[bplot_color_choice]),
+                whiskerprops=dict(
+                    color=bplot_colors[bplot_color_choice]),
+                flierprops=dict(
+                    color=bplot_colors[bplot_color_choice],
+                    markeredgecolor=flier_colors[bplot_color_choice],
+                    marker='+'),
+                medianprops=dict(
+                    color=median_colors[bplot_color_choice+1])
                 )
             bplot_boxes.append(bp["boxes"][0])
             bplot_legends.append(input_file)
