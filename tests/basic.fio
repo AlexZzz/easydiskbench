@@ -19,13 +19,22 @@ rw=randread
 bs=32k
 rw=randread
 
-[rw1m]
+[rw1m_sync]
 bs=1m
 rw=randwrite
 sync=1
 
+[w1m_sync]
+bs=1m
+rw=write
+sync=1
+
 [w1m]
 bs=1m
+rw=write
+
+[w4m_sync]
+bs=4m
 rw=write
 sync=1
 
@@ -41,10 +50,6 @@ rw=randread
 bs=4m
 rw=randread
 
-[rr1m]
-bs=1m
-rw=randread
-
 [r1m]
 bs=1m
 rw=read
@@ -58,6 +63,12 @@ bs=4k
 rw=randwrite
 random_distribution=pareto:0.25
 
+[rw4k_pareto_sync]
+bs=4k
+rw=randwrite
+sync=1
+random_distribution=pareto:0.25
+
 [rr4k_pareto]
 bs=4k
 rw=randread
@@ -66,6 +77,12 @@ random_distribution=pareto:0.25
 [rw1m_pareto]
 bs=1m
 rw=randwrite
+random_distribution=pareto:0.25
+
+[rw1m_pareto_sync]
+bs=1m
+rw=randwrite
+sync=1
 random_distribution=pareto:0.25
 
 [rr1m_pareto]
