@@ -24,9 +24,14 @@ bs=1m
 rw=randwrite
 sync=1
 
-[rw4m]
+[w1m]
+bs=1m
+rw=write
+sync=1
+
+[w4m]
 bs=4m
-rw=randwrite
+rw=write
 
 [rr1m]
 bs=1m
@@ -34,6 +39,10 @@ rw=randread
 
 [rr4m]
 bs=4m
+rw=randread
+
+[rr1m]
+bs=1m
 rw=randread
 
 [r1m]
@@ -44,12 +53,22 @@ rw=read
 bs=4m
 rw=read
 
-[r4k_cache_check]
+[rw4k_pareto]
+bs=4k
+rw=randwrite
+random_distribution=pareto:0.25
+
+[rr4k_pareto]
 bs=4k
 rw=randread
 random_distribution=pareto:0.25
 
-[r1m_cache_check]
+[rw1m_pareto]
+bs=1m
+rw=randwrite
+random_distribution=pareto:0.25
+
+[rr1m_pareto]
 bs=1m
 rw=randread
 random_distribution=pareto:0.25
