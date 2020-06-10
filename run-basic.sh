@@ -33,7 +33,6 @@ CREDS="${REMOTE_USER}@${HOST}"
 SCP_ARGS="${CREDS}:${DIR}"
 
 fatal() {
-  echo Please
   printf "\033[38;5;196mAn error occured!\n"
   printf "Please, cleanup %s on %s manually.\n\033[39m" "${DIR}" "${HOST}"
   exit 1
