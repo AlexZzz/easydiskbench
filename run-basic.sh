@@ -51,7 +51,7 @@ if [[ -d ./results/${HOST} ]]; then
 fi
 mkdir -p ./results/${HOST}
 
-command -v fio > /dev/null 2>&1 || install_fio
+ssh "${CREDS}" 'command -v fio > /dev/null 2>&1' || install_fio
 
 scp -r ./tests "${SCP_ARGS}"
 if [[ $? != 0 ]]; then
