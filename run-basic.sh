@@ -1,5 +1,7 @@
 #!/bin/bash
 
+FILENAME="../fiofile"
+
 case "$#" in
   0 )
     HOST='localhost'
@@ -23,8 +25,13 @@ case "$#" in
     DIR="${3}"
     REMOTE_USER="${1}"
     ;;
+  4 )
+    HOST="${2}"
+    DIR="${3}"
+    REMOTE_USER="${1}"
+    FILENAME="${4}"
   * )
-    echo "Accept only three arguments: ${0} remote_user host path"
+    echo "Accept only four arguments: ${0} remote_user host path filename"
     exit 1
     ;;
 esac
@@ -61,7 +68,7 @@ ssh "${CREDS}" "
 pushd ${DIR}
 mkdir ./results
 pushd ./results
-fio ../basic.fio --filename=../fiofile --output=./base_results
+fio ../basic.fio --filename=${FILENAME} --output=./base_results
 popd
 "
 if [[ $? != 0 ]]; then
