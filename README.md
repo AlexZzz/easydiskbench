@@ -1,4 +1,4 @@
-# FIO-runner
+# EasyDiskBench
 ...is a flexible IO tester runner.
 
 This repo contains a small set of tests and a few scripts to run the benchmarks and plot results.
@@ -51,7 +51,7 @@ Block size - 4k for 4 kibibyte, 4m for 4 mebibyte.
 * `libaio` is used, because it's one of the most popular library. At least, most drive-latency-sensitive application uses libaio.
 * `O_SYNC` is used for synchronized IO. It is possible to use `fsync()`/`fdatasync()`, but if we use `O_SYNC`, it's easier to parse results - every `clat` includes flush request.
 * Every test runs twice. This is especially important for the first test in suite, first run will be (sometimes much) slower, than the second run.
-* Every test runs with iodepth=1. We don't measure concurrent access here, only one-thread latency. As these tests were written for benchmarking cloud environment, we may assume that every one parallel IO or parallel thread will add the same performance as one-threaded fio, until we hit the limit.
+* Every test runs with iodepth=1. We don't measure concurrent access latency/bandwidth here, only one-thread latency. As these tests were written for benchmarking cloud environment, we may assume that every one parallel IO or parallel thread will add the same performance as one-threaded fio, until we hit the limit.
 
 There're different types of workloads:
 1. synchronized random writes
@@ -63,18 +63,32 @@ There're different types of workloads:
 
 And all the kinds of random workloads with pareto distribution.
 
-#### Synchronized writes with small block size
+## run-basic.sh
 
-Databases on the network disks are often limited by one-threaded latency of the database journaling thread. Most of them write to the journal with 8K blocks. So, for simplicity these benchmarks might tell something about database performance on the test drive. Do not interpret it as-is, do the comparison!
+`run-basic.sh` accepts four arguments:
+1. `remote_user` - remote user name, will be used for ssh/scp.
+2. `host` - hostname of the remote virtual machine (or IP-address).
+3. `path` - path to the directory which will be created, used for the tests and cleaned up.
+4. `filename` - name of the file, which will be used with a `--filename` argument for the FIO. You may use it to specify disk name, e.g. `/dev/sdb`.
 
-#### Random and sequiential reads
+## plot-all.sh
 
-These tests might show difference if the storage provides readahead logic. Sequential reads could be faster.
+Runs `plot.py` to plot graphs from `./results/*` directories. You may pass any other directories as an arguments.
 
-#### Pareto distribution
+## plot.py
 
-Pareto distribution test benchmarks the cache if it is enabled for a virtual machine. If cache is used, the `rr`(random read) test will show performance growth. It will also show performance growth (but less!) without cache, because most backends use their own caching (e.g. on the server with the part of a disk).
-If it is a writeback caching, it might show performance degradation for synchronized writes.
+Plots graphs from FIO log passed with `-i` argument. `--interval` is used to count median or distribution for the interval, not for every single value.
+
+If one wants to see a distribution instead of median value, just drop `--median` flag. So, plotting latency results is easy:
+`./plot.py -i lat_results.1.log --interval 10000 -o lat_results.png`
+
+To plot from FIO IOPS log which is collected without summarization, it is useful to summarize values. Use `--sum-bucket` for it. Set `--value-divider` to 1, to print raw values (number of IOs).
+`./plot.py -i iops_results.1.log --interval 1000 --ylabel IO/s --value-divider 1 --median --sum-bucket 1000 -o iops_results.png`
+
+To plot bandwidth log it may be useful to set `--value-divider` to 1024, so one can see MiB/s.
+`./plot.py -i bw_results.1.log --interval 1000 --ylabel MiB/s --value-divider 1024 --median -o bw_results.png`
+
+Use `plot.py --help` to find out more about options.
 
 ## TODO
 1. Add test suite to benchmark with different level of parallelism.
