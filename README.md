@@ -1,7 +1,7 @@
 # EasyDiskBench
 ...is a flexible IO tester runner.
 
-This repo contains a small set of tests and a few scripts to run the benchmarks and plot results.
+This repo contains a small set of tests and a few scripts to run the benchmarks and plotting results.
 
 ### What for?
 It was basically written to benchmark virtual machine's network disks.
@@ -28,7 +28,7 @@ Plot graphs:
 
 `./plot-all.sh`
 
-Now graphs are plotted using both results!
+Now graphs are plotted using both data sets!
 
 ## Interpreting results
 
@@ -91,4 +91,5 @@ To plot bandwidth log it may be useful to set `--value-divider` to 1024, so one 
 Use `plot.py --help` to find out more about options.
 
 ## TODO
-1. Add test suite to benchmark with different level of parallelism.
+1. Fix boxplot plotting on many data sets. Boxplots must be placed side by side within interval region.
+2. Add test suite to benchmark with different level of parallelism.
