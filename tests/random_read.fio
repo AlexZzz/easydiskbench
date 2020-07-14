@@ -2,29 +2,29 @@
 include ./global
 rw=randread
 
-[r4k]
+[rr4k]
 bs=4k
 
-[r8k]
+[rr8k]
 bs=8k
 
-[r16k]
+[rr16k]
 bs=16k
 
-[r32k]
+[rr32k]
 bs=32k
 
-[r64k]
+[rr64k]
 bs=64k
 
-[r128k]
+[rr128k]
 bs=128k
 
-[r256k]
+[rr256k]
 bs=256k
 
-[r1m]
+[rr1m]
 bs=1m
 
-[r4M]
+[rr4M]
 bs=4m
