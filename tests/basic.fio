@@ -6,6 +6,11 @@ bs=4k
 rw=randwrite
 sync=1
 
+[rw8k_sync]
+bs=8k
+rw=randwrite
+sync=1
+
 [rw32k_sync]
 bs=32k
 rw=randwrite
@@ -13,6 +18,10 @@ sync=1
 
 [rr4k]
 bs=4k
+rw=randread
+
+[rr8k]
+bs=8k
 rw=randread
 
 [rr32k]
