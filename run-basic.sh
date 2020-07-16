@@ -30,6 +30,7 @@ case "$#" in
     DIR="${3}"
     REMOTE_USER="${1}"
     FILENAME="${4}"
+    ;;
   * )
     echo "Accept only four arguments: ${0} remote_user host path filename"
     exit 1
