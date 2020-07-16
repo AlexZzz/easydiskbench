@@ -48,7 +48,7 @@ Block size - 4k for 4 kibibyte, 4m for 4 mebibyte.
 ### Workloads
 
 * `O_DIRECT` flag is used to bypass the page cache.
-* `libaio` is used, because it's one of the most popular library. At least, most drive-latency-sensitive application uses libaio.
+* `libaio` is used, because it's the most popular library. At least, most drive-latency-sensitive application use libaio.
 * `O_SYNC` is used for synchronized IO. It is possible to use `fsync()`/`fdatasync()`, but if we use `O_SYNC`, it's easier to parse results - every `clat` includes flush request.
 * Every test runs twice. This is especially important for the first test in suite, first run will be (sometimes much) slower, than the second run.
 * Every test runs with iodepth=1. We don't measure concurrent access latency/bandwidth here, only one-thread latency. As these tests were written for benchmarking cloud environment, we may assume that every one parallel IO or parallel thread will add the same performance as one-threaded fio, until we hit the limit.
