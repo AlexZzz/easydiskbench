@@ -3,10 +3,6 @@
 FILENAME="../fiofile"
 
 case "$#" in
-  0 )
-    HOST='localhost'
-    DIR="/home/$(logname)"
-    ;;
   1 )
     if [[ "help" == "${1}" ]]; then
       echo "Usage: ${0} HOST PATH"
@@ -32,7 +28,7 @@ case "$#" in
     FILENAME="${4}"
     ;;
   * )
-    echo "Accept only four arguments: ${0} remote_user host path filename"
+    echo "Accept only one to four arguments: ${0} remote_user host path filename"
     exit 1
     ;;
 esac
