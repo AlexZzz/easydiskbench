@@ -6,23 +6,23 @@ bs=4k
 rw=randwrite
 sync=1
 
+[rr4k]
+bs=4k
+rw=randread
+
 [rw8k_sync]
 bs=8k
 rw=randwrite
 sync=1
 
+[rr8k]
+bs=8k
+rw=randread
+
 [rw32k_sync]
 bs=32k
 rw=randwrite
 sync=1
-
-[rr4k]
-bs=4k
-rw=randread
-
-[rr8k]
-bs=8k
-rw=randread
 
 [rr32k]
 bs=32k
@@ -38,30 +38,30 @@ bs=1m
 rw=write
 sync=1
 
-[w1m]
+[rr1m]
 bs=1m
-rw=write
-
-[w4m_sync]
-bs=4m
-rw=write
-sync=1
+rw=randread
 
 [w4m]
 bs=4m
 rw=write
 
-[rr1m]
-bs=1m
-rw=randread
-
 [rr4m]
 bs=4m
 rw=randread
 
+[w1m]
+bs=1m
+rw=write
+
 [r1m]
 bs=1m
 rw=read
+
+[w4m_sync]
+bs=4m
+rw=write
+sync=1
 
 [r4m]
 bs=4m
