@@ -1,6 +1,7 @@
 filesize=1G
 direct=1
 ioengine=libaio
+iodepth=1
 stonewall
 loops=2
 per_job_logs=1
