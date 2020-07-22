@@ -73,19 +73,20 @@ And all the kinds of random workloads with pareto distribution.
 
 ## plot-all.sh
 
-Runs `plot.py` to plot graphs from `./results/*` directories. You may pass any other directories as an arguments.
+Runs `plot.py` to plot graphs from `./results/*` directories. You may pass any other directories as arguments:
+`./plot-all.sh ./results/first ./results/second`
 
 ## plot.py
 
-Plots graphs from FIO log passed with `-i` argument. `--interval` is used to count median or distribution for the interval, not for every single value.
+Plots graphs from FIO log passed with `-i` argument. `--interval (msec)` is used to count median or distribution for the time interval in milliseconds.
 
 If one wants to see a distribution instead of median value, just drop `--median` flag. So, plotting latency results is easy:
 `./plot.py -i lat_results.1.log --interval 10000 -o lat_results.png`
 
-To plot from FIO IOPS log which is collected without summarization, it is useful to summarize values. Use `--sum-bucket` for it. Set `--value-divider` to 1, to print raw values (number of IOs).
+To plot from FIO IOPS log which is collected without summarization, it is useful to summarize values. Use `--sum-bucket` for it. Set `--value-divider` to 1, to print raw values (number of IOs). All the values are divided by the value represented by this option. Default value is 1000000, which is used to convert latency results from nanoseconds to milliseconds. `--sum-bucket` option will ask the script to summarize all results on the interval equal to the given value.
 `./plot.py -i iops_results.1.log --interval 1000 --ylabel IO/s --value-divider 1 --median --sum-bucket 1000 -o iops_results.png`
 
-To plot bandwidth log it may be useful to set `--value-divider` to 1024, so one can see MiB/s.
+To plot bandwidth log it may be useful to set `--value-divider` to 1024, so one can see MiB/s. Use `--interval 1000` to really make it per second.
 `./plot.py -i bw_results.1.log --interval 1000 --ylabel MiB/s --value-divider 1024 --median -o bw_results.png`
 
 Use `plot.py --help` to find out more about options.
