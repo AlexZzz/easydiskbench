@@ -6,11 +6,6 @@ import csv
 import plotly.graph_objects as go
 import numpy as np
 
-# This is just a list for boxplot colors. Why not?
-bplot_colors = ['red', 'blue', 'green', 'lightblue', 'lightgreen', 'pink', 'burlywood', 'chartreuse']
-flier_colors = ['pink', 'lightblue', 'lightgreen', 'blue', 'green', 'red', 'burlywood', 'chartreuse']
-median_colors = ['blue', 'red', 'lightgreen', 'pink', 'burlywood', 'chartreuse', 'green', 'lightblue']
-
 def get_time_value(filename):
     f = open(filename,"r+")
     count = 0
@@ -86,8 +81,7 @@ def work(args):
                                     y=np.array(values_plot),mode="lines",
                                     name=input_file))
         else:
-            for n, v in enumerate(values_plot,start=0):
-                fig.add_trace(go.Box(y=values_plot,
+            fig.add_trace(go.Box(y=values_plot,
                                     x=labels_plot,
                                     name=input_file))
 #            locs, ticks = plt.xticks()
