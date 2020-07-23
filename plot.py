@@ -3,7 +3,7 @@ import argparse
 import sys
 import os
 import csv
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 import numpy as np
 
 # This is just a list for boxplot colors. Why not?
@@ -28,9 +28,9 @@ def count_lines(filename):
     return count
 
 def work(args):
-    figure, axes = plt.subplots(nrows=1,ncols=1,figsize=(9,4))
     if not args.median: # Do we need better solution?
         bplot_color_choice = 0
+    fig = go.Figure()
 
     bplot_boxes = list()
     bplot_legends = list()
@@ -82,51 +82,54 @@ def work(args):
                     values_plot.append(np.array(values).astype(np.float))
 
         if args.median:
-            axes.plot(labels_plot,np.array(values_plot),'o-',label=input_file)
+            fig.add_trace(go.Scatter(x=labels_plot,
+                                    y=np.array(values_plot),mode="lines",
+                                    name=input_file))
         else:
-            locs, ticks = plt.xticks()
-            manage_ticks = False
-            if len(locs) < len(labels_plot):
-                manage_ticks = True
-            bp = axes.boxplot(
-                values_plot,
-                vert=True,
-                manage_ticks=manage_ticks,
-                patch_artist=True,
-                labels=labels_plot, # Plot name as filename
-                whis=[1,99],
-                boxprops=dict(
-                    facecolor=bplot_colors[bplot_color_choice]),
-                whiskerprops=dict(
-                    color=bplot_colors[bplot_color_choice]),
-                flierprops=dict(
-                    color=bplot_colors[bplot_color_choice],
-                    markeredgecolor=flier_colors[bplot_color_choice],
-                    marker='+'),
-                medianprops=dict(
-                    color=median_colors[bplot_color_choice+1])
-                )
-            bplot_boxes.append(bp["boxes"][0])
-            bplot_legends.append(input_file)
-            bplot_color_choice += 1
+            for n, v in enumerate(values_plot,start=0):
+                fig.add_trace(go.Box(y=values_plot,
+                                    x=labels_plot,
+                                    name=input_file))
+#            locs, ticks = plt.xticks()
+#            manage_ticks = False
+#            if len(locs) < len(labels_plot):
+#                manage_ticks = True
+#            bp = axes.boxplot(
+#                values_plot,
+#                vert=True,
+#                manage_ticks=manage_ticks,
+#                patch_artist=True,
+#                labels=labels_plot, # Plot name as filename
+#                whis=[1,99],
+#                boxprops=dict(
+#                    facecolor=bplot_colors[bplot_color_choice]),
+#                whiskerprops=dict(
+#                    color=bplot_colors[bplot_color_choice]),
+#                flierprops=dict(
+#                    color=bplot_colors[bplot_color_choice],
+#                    markeredgecolor=flier_colors[bplot_color_choice],
+#                    marker='+'),
+#                medianprops=dict(
+#                    color=median_colors[bplot_color_choice+1])
+#                )
+#            bplot_boxes.append(bp["boxes"][0])
+#            bplot_legends.append(input_file)
+#            bplot_color_choice += 1
 
-    axes.set_title(args.title)
-    if not args.median:
-        axes.legend(bplot_boxes,bplot_legends)
-    else:
-        plt.legend()
-    plt.ylabel(args.ylabel)
-    plt.xlabel(args.xlabel)
+    fig.update_layout(title=args.title,
+                    xaxis_title=args.xlabel,
+                    yaxis_title=args.ylabel)
+    fig.update_yaxes(rangemode="tozero")
     if (args.top_limit):
-        plt.ylim(bottom=0,top=args.top_limit)
-    else:
-        plt.ylim(bottom=0)
-    plt.grid(True)
-
+        fig.update_yaxes(range=[0,args.top_limit])
     if args.output:
-        plt.savefig(args.output)
+        fig.write_image(args.output)
     else:
-        plt.show()
+        fig.show()
+
+
+#    if not args.median:
+#        axes.legend(bplot_boxes,bplot_legends)
 
 def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
