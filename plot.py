@@ -24,40 +24,38 @@ def count_lines(filename):
     return count
 
 def work(args):
-    if not args.median: # Do we need better solution?
-        bplot_color_choice = 0
     fig = go.Figure()
-
-    bplot_boxes = list()
-    bplot_legends = list()
-
     header = ["time","value","op","bs"]
+
     for input_file in args.input:
         df = pd.read_csv(input_file,names=header)
-        fig.add_trace(go.Scatter(df, x="time", y="value",mode="lines",name=input_file))
-        print(df)
+        df['time_round'] = round(df['time']/args.interval)*args.interval+args.interval
+        df['value'] /= args.value_divider
 
+        if not args.msec:
+            df['time_round'] /= 1e3
+
+        if args.sum_bucket:
+            df['summarize'] = round(df['time']/args.sum_bucket)*args.sum_bucket+args.sum_bucket
+            sum_df = df.groupby('summarize').sum().reset_index()
+            median_df = sum_df.groupby('time_round').median().reset_index()
+            fig.add_trace(go.Scatter(x=median_df['time_round'], y=median_df['value'],
+                                    mode="lines", name=input_file))
+        elif args.median:
+            median_df = df.groupby('time_round').median().reset_index()
+            fig.add_trace(go.Scatter(x=median_df['time_round'], y=median_df['value'],
+                                mode="lines",name=input_file))
+        else:
+            fig.add_trace(go.Box(x=df['time_round'], y=df['value'],
+                                name=input_file))
+
+    fig.update_layout(title=args.title,
+                    xaxis_title=args.xlabel,
+                    yaxis_title=args.ylabel)
+    if (args.top_limit):
+        fig.update_yaxes(range=[0,args.top_limit])
+    fig.update_yaxes(rangemode="tozero")
     fig.show()
-#
-#        if args.median:
-#            fig.add_trace(go.Scatter(x=labels_plot,
-#                                    y=np.array(values_plot),mode="lines",
-#                                    name=input_file))
-#        else:
-#            fig.add_trace(go.Box(y=values_plot,
-#                                    x=labels_plot,
-#                                    name=input_file))
-#
-#    fig.update_layout(title=args.title,
-#                    xaxis_title=args.xlabel,
-#                    yaxis_title=args.ylabel)
-#    fig.update_yaxes(rangemode="tozero")
-#    if (args.top_limit):
-#        fig.update_yaxes(range=[0,args.top_limit])
-#    if args.output:
-#        fig.write_image(args.output)
-#    else:
-#        fig.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
