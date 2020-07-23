@@ -5,6 +5,7 @@ import os
 import csv
 import plotly.graph_objects as go
 import numpy as np
+import pandas as pd
 
 def get_time_value(filename):
     f = open(filename,"r+")
@@ -30,100 +31,33 @@ def work(args):
     bplot_boxes = list()
     bplot_legends = list()
 
+    header = ["time","value","op","bs"]
     for input_file in args.input:
-        bound = args.interval
-        sum_bound = args.sum_bucket
-        values_plot = list() # Values of Y to plot
-        labels_plot = list() # Labels for X to plot on
-        values = list() # Raw values from file
-        lines_count = count_lines(input_file)
-        for timestamp, v, line_num in get_time_value(input_file):
-            v = v / args.value_divider
-            if (timestamp > bound): # |---s-----bt <- t is after the bound. Cleanup and prepare for plot
-                if not args.msec:
-                    labels_plot.append(bound/1e3)
-                else:
-                    labels_plot.append(bound)
-                if args.median: # Count median here if needed
-                    values_plot.append(np.percentile(values,50))
-                else:
-                    values_plot.append(np.array(values).astype(np.float))
-                values.clear()
-                bound = bound + args.interval
-                sum_bound = args.sum_bucket
-                values.append(v)
-            elif (sum_bound):
-                if (timestamp <= bound - args.interval + sum_bound): # |-t-s-----b <- we are between '|' and 's'
-                    try:
-                        values[-1] += v
-                    except IndexError: # The only reason is empty list
-                        values.append(v)
-                else: # If we're out of bucket, then create set new sum_bound
-                    sum_bound += args.sum_bucket
-                    if (sum_bound > bound):
-                        sum_bound = bound
-                    values.append(v) # And append value to new bucket
-            else: # We are not summing and not over the bound. Just add new value
-                values.append(v)
+        df = pd.read_csv(input_file,names=header)
+        fig.add_trace(go.Scatter(df, x="time", y="value",mode="lines",name=input_file))
+        print(df)
 
-            if (line_num == lines_count): # We done. This was the last iteration
-                if not args.msec:
-                    labels_plot.append(timestamp/1e3)
-                else:
-                    labels_plot.append(timestamp)
-                if args.median:
-                    values_plot.append(np.percentile(values, 50))
-                else:
-                    values_plot.append(np.array(values).astype(np.float))
-
-        if args.median:
-            fig.add_trace(go.Scatter(x=labels_plot,
-                                    y=np.array(values_plot),mode="lines",
-                                    name=input_file))
-        else:
-            fig.add_trace(go.Box(y=values_plot,
-                                    x=labels_plot,
-                                    name=input_file))
-#            locs, ticks = plt.xticks()
-#            manage_ticks = False
-#            if len(locs) < len(labels_plot):
-#                manage_ticks = True
-#            bp = axes.boxplot(
-#                values_plot,
-#                vert=True,
-#                manage_ticks=manage_ticks,
-#                patch_artist=True,
-#                labels=labels_plot, # Plot name as filename
-#                whis=[1,99],
-#                boxprops=dict(
-#                    facecolor=bplot_colors[bplot_color_choice]),
-#                whiskerprops=dict(
-#                    color=bplot_colors[bplot_color_choice]),
-#                flierprops=dict(
-#                    color=bplot_colors[bplot_color_choice],
-#                    markeredgecolor=flier_colors[bplot_color_choice],
-#                    marker='+'),
-#                medianprops=dict(
-#                    color=median_colors[bplot_color_choice+1])
-#                )
-#            bplot_boxes.append(bp["boxes"][0])
-#            bplot_legends.append(input_file)
-#            bplot_color_choice += 1
-
-    fig.update_layout(title=args.title,
-                    xaxis_title=args.xlabel,
-                    yaxis_title=args.ylabel)
-    fig.update_yaxes(rangemode="tozero")
-    if (args.top_limit):
-        fig.update_yaxes(range=[0,args.top_limit])
-    if args.output:
-        fig.write_image(args.output)
-    else:
-        fig.show()
-
-
-#    if not args.median:
-#        axes.legend(bplot_boxes,bplot_legends)
+    fig.show()
+#
+#        if args.median:
+#            fig.add_trace(go.Scatter(x=labels_plot,
+#                                    y=np.array(values_plot),mode="lines",
+#                                    name=input_file))
+#        else:
+#            fig.add_trace(go.Box(y=values_plot,
+#                                    x=labels_plot,
+#                                    name=input_file))
+#
+#    fig.update_layout(title=args.title,
+#                    xaxis_title=args.xlabel,
+#                    yaxis_title=args.ylabel)
+#    fig.update_yaxes(rangemode="tozero")
+#    if (args.top_limit):
+#        fig.update_yaxes(range=[0,args.top_limit])
+#    if args.output:
+#        fig.write_image(args.output)
+#    else:
+#        fig.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
