@@ -3,6 +3,8 @@
 
 This repo contains a small set of tests and a few scripts to run the benchmarks and plotting results.
 
+It uses plotly and plotly-orca to build and save plots.
+
 ### What for?
 It was basically written to benchmark virtual machine's network disks.
 
