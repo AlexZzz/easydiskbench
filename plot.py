@@ -29,6 +29,8 @@ def work(args):
 
     for input_file in args.input:
         df = pd.read_csv(input_file,names=header)
+        plot_name = os.path.basename(os.path.dirname(input_file)) \
+                + ": " + os.path.basename(input_file)
         df['time_round'] = round(df['time']/args.interval)*args.interval+args.interval
         df['value'] /= args.value_divider
 
@@ -42,14 +44,15 @@ def work(args):
             else:
                 df = df.groupby('time_round').median().reset_index()
             fig.add_trace(go.Scatter(x=df['time_round'], y=df['value'],
-                                mode="lines",name=input_file))
+                                mode="lines",name=plot_name))
         else:
             fig.add_trace(go.Box(x=df['time_round'], y=df['value'],
-                                name=input_file))
+                                name=plot_name))
 
     fig.update_layout(title=args.title,
                     xaxis_title=args.xlabel,
                     yaxis_title=args.ylabel,
+                    showlegend=True,
                     legend=dict(
                         font=dict(
                             size=24
