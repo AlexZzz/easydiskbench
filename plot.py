@@ -44,10 +44,10 @@ def work(args):
             else:
                 df = df.groupby('time_round').median().reset_index()
             fig.add_trace(go.Scatter(x=df['time_round'], y=df['value'],
-                                mode="lines",name=plot_name))
+                                mode="lines+markers",name=plot_name))
         else:
             fig.add_trace(go.Box(x=df['time_round'], y=df['value'],
-                                name=plot_name))
+                                name=plot_name, marker=dict(size=1)))
 
     fig.update_layout(title=args.title,
                     xaxis_title=args.xlabel,
