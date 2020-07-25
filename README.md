@@ -8,6 +8,9 @@ It uses plotly and plotly-orca to build and save plots.
 ### What for?
 It was basically written to benchmark virtual machine's network disks.
 
+## Prerequisites
+You must have `plotly` and [plotly-orca](https://github.com/plotly/orca) packages installed to plot the graphs.
+
 ## How to
 
 Create a VM.
