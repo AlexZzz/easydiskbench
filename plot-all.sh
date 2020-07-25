@@ -35,7 +35,7 @@ for f in ${PLOT_FILES}; do
     PLOT_WITH_PATHS=${PLOT_WITH_PATHS}" "${d}/${f}
   done
   if [[ ${f} == *iops.[0-9]*.log* ]]; then
-    ./plot.py -i ${PLOT_WITH_PATHS} --interval 1000 --ylabel IO/s --value-divider 1 --median --sum-bucket 1000 -o ${OUTPUT_DIR}/${f}_median.png
+    ./plot.py -i ${PLOT_WITH_PATHS} --interval 1000 --ylabel IO/s --value-divider 1 --median --per-second -o ${OUTPUT_DIR}/${f}_median.png
   elif [[ ${f} == *bw.[0-9]*.log* ]]; then
     ./plot.py -i ${PLOT_WITH_PATHS} --interval 1000 --ylabel MiB/s --value-divider 1024 --median -o ${OUTPUT_DIR}/${f}_median.png
   elif [[ ${f} == *lat.[0-9]*.log* ]]; then

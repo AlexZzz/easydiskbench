@@ -35,15 +35,13 @@ def work(args):
         if not args.msec:
             df['time_round'] /= 1e3
 
-        if args.sum_bucket:
-            df['summarize'] = round(df['time']/args.sum_bucket)*args.sum_bucket+args.sum_bucket
-            sum_df = df.groupby('summarize').sum().reset_index()
-            median_df = sum_df.groupby('time_round').median().reset_index()
-            fig.add_trace(go.Scatter(x=median_df['time_round'], y=median_df['value'],
-                                    mode="lines", name=input_file))
-        elif args.median:
-            median_df = df.groupby('time_round').median().reset_index()
-            fig.add_trace(go.Scatter(x=median_df['time_round'], y=median_df['value'],
+        if args.median:
+            if args.per_second:
+                df = df.groupby('time_round').sum().reset_index()
+                df['value'] /= args.interval/1e3
+            else:
+                df = df.groupby('time_round').median().reset_index()
+            fig.add_trace(go.Scatter(x=df['time_round'], y=df['value'],
                                 mode="lines",name=input_file))
         else:
             fig.add_trace(go.Box(x=df['time_round'], y=df['value'],
@@ -55,7 +53,11 @@ def work(args):
     if (args.top_limit):
         fig.update_yaxes(range=[0,args.top_limit])
     fig.update_yaxes(rangemode="tozero")
-    fig.show()
+
+    if args.output:
+        fig.write_image(args.output)
+    else:
+        fig.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Plot stuff")
@@ -63,7 +65,7 @@ def main():
     parser.add_argument('--output','-o',type=str,help="Write char to this output file")
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msec)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
-    parser.add_argument('--sum-bucket',type=int,help="Summarize values on this interval and treat it as a value to plot",default=0)
+    parser.add_argument('--per-second',action='store_true',help="Count per-second median value for the given interval (eg IO/s graph)")
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
     parser.add_argument('--msec',action='store_true',help="Show time in milliseconds instead of seconds")
     parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
