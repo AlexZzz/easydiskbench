@@ -87,7 +87,7 @@ If one wants to see a distribution instead of median value, just drop `--median`
 ./plot.py -i lat_results.1.log --interval 10000 -o lat_results.png
 ```
 
-To plot from FIO IOPS log which is collected without summarization, it is useful to summarize values. Use `--sum-bucket` for it. Set `--value-divider` to 1, to print raw values (number of IOs). All the values are divided by the value represented by this option. Default value is 1000000, which is used to convert latency results from nanoseconds to milliseconds. `--per-second` option asks script to summarize and divide by interval all the values, which is useful for IO plot.
+To plot from FIO IOPS log which is collected without summarization, it is useful to summarize values. Use `--sum-bucket` for it. Set `--value-divider` to 1, to print raw values (number of IOs). All the values are divided by the value represented by this option. Default value is 1000000, which is used to convert latency results from nanoseconds to milliseconds. `--per-second` option asks script to summarize and divide by the interval all the values on that interval, which is useful for IO plot.
 ```
 ./plot.py -i iops_results.1.log --interval 1000 --ylabel IO/s --value-divider 1 --median --per-second -o iops_results.png
 ```

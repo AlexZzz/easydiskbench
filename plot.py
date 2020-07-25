@@ -69,7 +69,7 @@ def main():
     parser.add_argument('--output','-o',type=str,help="Write char to this output file")
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msec)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
-    parser.add_argument('--per-second',action='store_true',help="Count per-second median value for the given interval (eg IO/s graph)")
+    parser.add_argument('--per-second',action='store_true',help="Count per-second average value for the given interval (eg IO/s graph)")
     parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
     parser.add_argument('--msec',action='store_true',help="Show time in milliseconds instead of seconds")
     parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
