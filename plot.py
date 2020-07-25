@@ -49,13 +49,20 @@ def work(args):
 
     fig.update_layout(title=args.title,
                     xaxis_title=args.xlabel,
-                    yaxis_title=args.ylabel)
+                    yaxis_title=args.ylabel,
+                    legend=dict(
+                        font=dict(
+                            size=24
+                        ),
+                        yanchor="top",
+                        xanchor="right",
+                        borderwidth=1))
     if (args.top_limit):
         fig.update_yaxes(range=[0,args.top_limit])
     fig.update_yaxes(rangemode="tozero")
 
     if args.output:
-        fig.write_image(args.output)
+        fig.write_image(args.output,width="1920",height="1080")
     else:
         fig.show()
 
