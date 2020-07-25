@@ -53,10 +53,7 @@ def work(args):
                     legend=dict(
                         font=dict(
                             size=24
-                        ),
-                        yanchor="top",
-                        xanchor="right",
-                        borderwidth=1))
+                        )))
     if (args.top_limit):
         fig.update_yaxes(range=[0,args.top_limit])
     fig.update_yaxes(rangemode="tozero")
