@@ -81,6 +81,8 @@ And all the kinds of random workloads with pareto distribution.
 Runs `plot.py` to plot graphs from `./results/*` directories. You may pass any other directories as arguments:
 `./plot-all.sh ./results/first ./results/second`
 
+This script assumes that the given directories contain the same set of files. It will plot all the results on one plot if filename is the same.
+
 ## plot.py
 
 Plots graphs from FIO log passed with `-i` argument. `--interval (msec)` is used to count median or distribution for the time interval in milliseconds.
