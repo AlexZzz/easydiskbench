@@ -2,33 +2,19 @@
 import argparse
 import sys
 import os
-import csv
 import plotly.graph_objects as go
-import numpy as np
 import pandas as pd
-
-def get_time_value(filename):
-    f = open(filename,"r+")
-    count = 0
-    for line in f.readlines():
-        if line:
-            linelist = line.split(",")
-            count += 1
-            yield int(linelist[0].strip()), int(linelist[1].strip()), int(count)
-
-def count_lines(filename):
-    count = 0
-    f = open(filename, "r+")
-    for line in f.readlines():
-        count += 1
-    return count
 
 def work(args):
     fig = go.Figure()
     header = ["time","value","op","bs"]
 
     for input_file in args.input:
-        df = pd.read_csv(input_file,names=header)
+        try:
+            df = pd.read_csv(input_file,names=header)
+        except FileNotFoundError:
+            print("No such file: {}. Skipping it...".format(input_file))
+            continue
         plot_name = os.path.basename(os.path.dirname(input_file)) \
                 + ": " + os.path.basename(input_file)
         df['time_round'] = round(df['time']/args.interval)*args.interval+args.interval
