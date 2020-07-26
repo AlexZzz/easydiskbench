@@ -48,7 +48,10 @@ def work(args):
     fig.update_yaxes(rangemode="tozero")
 
     if args.output:
-        fig.write_image(args.output,width="1920",height="1080")
+        if os.path.splitext(args.output)[1] == ".html":
+            fig.write_html(args.output)
+        else:
+            fig.write_image(args.output,width="1920",height="1080")
     else:
         fig.show()
 
