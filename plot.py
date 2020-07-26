@@ -49,7 +49,7 @@ def work(args):
 
     if args.output:
         if os.path.splitext(args.output)[1] == ".html":
-            fig.write_html(args.output)
+            fig.write_html(args.output, include_plotlyjs=args.plotlyjs)
         else:
             fig.write_image(args.output,width="1920",height="1080")
     else:
@@ -68,6 +68,7 @@ def main():
     parser.add_argument('--xlabel',type=str,help="Set this X-label",default="time (s)")
     parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion. Set to 1 for IOPS plot",default=1e6)
     parser.add_argument('--top-limit',type=float,help="Set Y axis top limit")
+    parser.add_argument('--plotlyjs',type=str,help="Passes this argument to include_plotlyjs when output is set to HTML. Refer to plotly documentation",default=True)
     args = parser.parse_args()
     work(args)
 
