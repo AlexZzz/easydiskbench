@@ -39,18 +39,21 @@ def work(args):
                     xaxis_title=args.xlabel,
                     yaxis_title=args.ylabel,
                     showlegend=True,
-                    legend=dict(
-                        font=dict(
-                            size=24
-                        )))
+                    )
     if (args.top_limit):
         fig.update_yaxes(range=[0,args.top_limit])
     fig.update_yaxes(rangemode="tozero")
 
     if args.output:
         if os.path.splitext(args.output)[1] == ".html":
-            fig.write_html(args.output, include_plotlyjs=args.plotlyjs)
+            fig.write_html(args.output, include_plotlyjs=args.plotlyjs,
+                            full_html=args.no_full_html)
         else:
+            fig.update_layout(
+                    legend=dict(
+                        font=dict(
+                            size=24
+                        )))
             fig.write_image(args.output,width="1920",height="1080")
     else:
         fig.show()
@@ -69,6 +72,7 @@ def main():
     parser.add_argument('--value-divider',type=int,help="Divide values on this value. Default is for nsec->msec convertion. Set to 1 for IOPS plot",default=1e6)
     parser.add_argument('--top-limit',type=float,help="Set Y axis top limit")
     parser.add_argument('--plotlyjs',type=str,help="Passes this argument to include_plotlyjs when output is set to HTML. Refer to plotly documentation",default=True)
+    parser.add_argument('--no-full-html',action='store_false',help="Passes full_html=False to plotly when output is set to HTML. Refer to plotly documentation")
     args = parser.parse_args()
     work(args)
 
