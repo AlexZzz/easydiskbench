@@ -23,17 +23,21 @@ def work(args):
         if not args.msec:
             df['time_round'] /= 1e3
 
-        if args.median:
-            if args.per_second:
-                df = df.groupby('time_round').sum().reset_index()
-                df['value'] /= args.interval/1e3
-            else:
-                df = df.groupby('time_round').median().reset_index()
-            fig.add_trace(go.Scatter(x=df['time_round'], y=df['value'],
-                                mode="lines+markers",name=plot_name))
-        else:
+        if args.per_second and (args.median or args.mean):
+            df = df.groupby('time_round').sum().reset_index()
+            df['value'] /= args.interval/1e3
+
+        if not args.median and not args.mean:
             fig.add_trace(go.Box(x=df['time_round'], y=df['value'],
                                 name=plot_name, marker=dict(size=1)))
+        if args.median:
+            median_df = df.groupby('time_round').median().reset_index()
+            fig.add_trace(go.Scatter(x=median_df['time_round'], y=median_df['value'],
+                                mode="lines+markers",name=plot_name+" median"))
+        if args.mean:
+            mean_df = df.groupby('time_round').mean().reset_index()
+            fig.add_trace(go.Scatter(x=mean_df['time_round'], y=mean_df['value'],
+                                mode="lines+markers",name=plot_name+" mean"))
 
     fig.update_layout(title=args.title,
                     xaxis_title=args.xlabel,
@@ -65,7 +69,8 @@ def main():
     parser.add_argument('--interval',type=int,help="Plot boxplot on interval (msec)",default=30000)
     parser.add_argument('--title','-t',type=str,help="Plot title",default="FIO results")
     parser.add_argument('--per-second',action='store_true',help="Count per-second average value for the given interval (eg IO/s graph)")
-    parser.add_argument('--median',action='store_true',help="Plot medians without boxplot")
+    parser.add_argument('--median',action='store_true',help="Plot median values")
+    parser.add_argument('--mean',action='store_true',help="Plot mean values")
     parser.add_argument('--msec',action='store_true',help="Show time in milliseconds instead of seconds")
     parser.add_argument('--ylabel',type=str,help="Set this Y-label",default="latency (msec)")
     parser.add_argument('--xlabel',type=str,help="Set this X-label",default="time (s)")
