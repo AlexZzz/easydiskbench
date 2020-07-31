@@ -16,7 +16,7 @@ def work(args):
             print("No such file: {}. Skipping it...".format(input_file))
             continue
         plot_name = os.path.basename(os.path.dirname(input_file)) \
-                + ": " + os.path.basename(input_file)
+                + ": " + (os.path.basename(input_file)).split(".", 1)[0]
         df['time_round'] = round(df['time']/args.interval)*args.interval+args.interval
         df['value'] /= args.value_divider
 
