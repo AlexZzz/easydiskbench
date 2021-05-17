@@ -44,7 +44,7 @@ fatal() {
 
 install_fio() {
   echo "No fio command found, trying to install"
-  ssh "${CREDS}" 'apt update && apt install fio -y'
+  ssh "${CREDS}" 'sudo apt update && sudo apt install fio -y'
 }
 
 if [[ -d ./results/${HOST} ]]; then
